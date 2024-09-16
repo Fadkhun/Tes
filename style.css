@@ -1,0 +1,56 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #e0e0e0;
+}
+
+.game-area {
+    position: relative;
+    background-image: url('background.png');
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+
+    /* Membuat area permainan dengan rasio 16:9 */
+    width: 100vw;
+    height: calc(100vw * 9 / 16); /* Mengatur tinggi berdasarkan rasio 16:9 */
+    
+    /* Jika tinggi layar lebih kecil daripada tinggi yang diinginkan, sesuaikan */
+    max-height: 100vh;
+    max-width: calc(100vh * 16 / 9); /* Sesuaikan lebar jika terlalu besar */
+
+    /* Background color di luar area permainan */
+    background-color: #0c0c0c;
+}
+
+#character {
+    position: absolute;
+    width: 50px; /* Ukuran baru 1/4 dari 50px */
+    height: 50px; /* Ukuran baru 1/4 dari 50px */
+}
+
+.controls {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.controls button {
+    width: 50px;
+    height: 50px;
+    background-color: #808080;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
+    color: white;
+}
