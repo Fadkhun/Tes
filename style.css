@@ -34,10 +34,8 @@ body {
 
 #character {
     position: absolute;
-    /* Mengatur ukuran karakter sebagai persentase dari lebar area permainan */
-    width: 5vw;
-    height: 5vw;
-    /* Menjaga agar ukuran karakter tetap proporsional */
+    width: 10vw; /* Ukuran karakter menyesuaikan lebar viewport */
+    height: auto; /* Pertahankan proporsi */
 }
 
 .controls {
@@ -48,11 +46,11 @@ body {
 }
 
 .controls button {
-    width: 5vw;
-    height: 5vw;
+    width: 6vw; /* Ukuran kontrol menyesuaikan lebar viewport */
+    height: 6vw; /* Sama dengan lebar untuk proporsional */
     background-color: #808080;
     border: none;
     border-radius: 10px;
-    font-size: 2vw;
+    font-size: 3vw; /* Ukuran font proporsional dengan lebar viewport */
     color: white;
 }
