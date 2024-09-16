@@ -1,80 +1,82 @@
-let character = document.getElementById('character');
-let gameArea = document.querySelector('.game-area');
-let step = 20; // Kecepatan gerakan karakter
-let currentBackground = 'background.png'; // Background saat ini
-let kananCounter = 0; // Counter untuk background kanan
+const character = document.getElementById('character');
+const gameArea = document.querySelector('.game-area');
+const speed = 5; // Kecepatan karakter, sesuaikan jika perlu
 
-// Atur posisi awal karakter di tengah area persegi
+let x = gameArea.clientWidth / 2 - character.clientWidth / 2;
+let y = gameArea.clientHeight / 2 - character.clientHeight / 2;
+
+function updateCharacterDirection(direction) {
+    character.src = `p1${direction}.png`;
+}
+
+function moveCharacter(dx, dy) {
+    x += dx;
+    y += dy;
+    
+    // Periksa dan sesuaikan jika karakter keluar dari batas area
+    if (x < 0) {
+        x = gameArea.clientWidth - character.clientWidth;
+        loadNewBackground('left');
+    } else if (x > gameArea.clientWidth - character.clientWidth) {
+        x = 0;
+        loadNewBackground('right');
+    }
+    
+    if (y < 0) {
+        y = gameArea.clientHeight - character.clientHeight;
+        loadNewBackground('top');
+    } else if (y > gameArea.clientHeight - character.clientHeight) {
+        y = 0;
+        loadNewBackground('bottom');
+    }
+
+    character.style.left = `${x}px`;
+    character.style.top = `${y}px`;
+}
+
+function loadNewBackground(direction) {
+    const backgrounds = {
+        left: 'background_kiri.png',
+        right: 'background_kanan.png',
+        top: 'background_atas.png',
+        bottom: 'background_bawah.png'
+    };
+    gameArea.style.backgroundImage = `url(${backgrounds[direction]})`;
+}
+
+// Kontrol tombol
+document.querySelector('.controls').addEventListener('click', (event) => {
+    if (event.target.tagName === 'BUTTON') {
+        switch (event.target.id) {
+            case 'left':
+                updateCharacterDirection('kiri');
+                moveCharacter(-speed, 0);
+                break;
+            case 'up':
+                updateCharacterDirection('atas');
+                moveCharacter(0, -speed);
+                break;
+            case 'down':
+                updateCharacterDirection('bawah');
+                moveCharacter(0, speed);
+                break;
+            case 'right':
+                updateCharacterDirection('kanan');
+                moveCharacter(speed, 0);
+                break;
+        }
+    }
+});
+
+// Atur ukuran karakter ke tengah saat memuat
+window.onload = () => {
+    setCharacterToCenter();
+    character.src = 'p1bawah.png'; // Set gambar awal karakter
+};
+
 function setCharacterToCenter() {
-    let startX = (gameArea.clientWidth / 2) - (character.clientWidth / 2);
-    let startY = (gameArea.clientHeight / 2) - (character.clientHeight / 2);
-    character.style.left = startX + 'px';
-    character.style.top = startY + 'px';
-}
-
-window.onload = setCharacterToCenter;
-
-function move(direction) {
-    let characterRect = character.getBoundingClientRect();
-    let gameAreaRect = gameArea.getBoundingClientRect();
-
-    switch (direction) {
-        case 'up':
-            character.style.top = character.offsetTop - step + 'px';
-            character.src = "p1atas.png";  // Ganti gambar saat bergerak ke atas
-            if (characterRect.top <= gameAreaRect.top) {
-                character.style.top = gameAreaRect.height - characterRect.height + 'px';
-                changeBackground('background_atas.png'); // Ganti background ke atas
-            }
-            break;
-        case 'down':
-            character.style.top = character.offsetTop + step + 'px';
-            character.src = "p1bawah.png";  // Ganti gambar saat bergerak ke bawah
-            if (characterRect.bottom >= gameAreaRect.bottom) {
-                character.style.top = 0 + 'px';
-                changeBackground('background_bawah.png'); // Ganti background ke bawah
-            }
-            break;
-        case 'left':
-            character.style.left = character.offsetLeft - step + 'px';
-            character.src = "p1kiri.png";  // Ganti gambar saat bergerak ke kiri
-            if (characterRect.left <= gameAreaRect.left) {
-                character.style.left = gameAreaRect.width - characterRect.width + 'px';
-
-                // Navigasi kiri ke background kiri
-                if (currentBackground === 'background.png') {
-                    changeBackground('background_kiri.png');
-                } else if (currentBackground.includes('background_kanan')) {
-                    changeBackground('background_kanan.png');
-                    kananCounter = 1;
-                } else {
-                    changeBackground('background.png');
-                }
-            }
-            break;
-        case 'right':
-            character.style.left = character.offsetLeft + step + 'px';
-            character.src = "p1kanan.png";  // Ganti gambar saat bergerak ke kanan
-            if (characterRect.right >= gameAreaRect.right) {
-                character.style.left = 0 + 'px';
-
-                if (currentBackground === 'background.png') {
-                    changeBackground('background_kanan.png');
-                    kananCounter = 1;
-                } else if (currentBackground.includes('background_kanan') && kananCounter < 5) {
-                    kananCounter++;
-                    changeBackground(`background_kanan${kananCounter}.png`);
-                } else if (kananCounter === 5) {
-                    changeBackground(`background_kanan5.png`);
-                }
-            }
-            break;
-    }
-}
-
-function changeBackground(newBackground) {
-    if (currentBackground !== newBackground) {
-        currentBackground = newBackground;
-        gameArea.style.backgroundImage = `url('${newBackground}')`;
-    }
+    x = (gameArea.clientWidth / 2) - (character.clientWidth / 2);
+    y = (gameArea.clientHeight / 2) - (character.clientHeight / 2);
+    character.style.left = `${x}px`;
+    character.style.top = `${y}px`;
 }
